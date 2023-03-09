@@ -47,11 +47,14 @@ class VideosViewController: UIViewController {
     
     private lazy var dataSource = makeDataSource()
     
+    typealias Snapshot = NSDiffableDataSourceSnapshot<Section, Video>
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         configureSearchController()
         configureNavigation()
         setupViews()
+        applySnapshot(animatingDifferences: true)
     }
     
     override func viewWillTransition(
@@ -112,7 +115,7 @@ extension VideosViewController: UICollectionViewDelegate {
 extension VideosViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
         videoList = filteredVideos(for: searchController.searchBar.text)
-        collectionView.reloadData()
+        applySnapshot(animatingDifferences: true)
     }
 }
 
@@ -182,6 +185,13 @@ private extension VideosViewController {
         })
         
         return dataSource
+    }
+    
+    func applySnapshot(animatingDifferences: Bool = false) {
+        var snapshot = Snapshot()
+        snapshot.appendSections([.main])
+        snapshot.appendItems(videoList)
+        dataSource.apply(snapshot, animatingDifferences: animatingDifferences)
     }
 }
 
