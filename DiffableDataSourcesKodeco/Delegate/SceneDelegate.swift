@@ -17,7 +17,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     ) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: windowScene)
-        window?.rootViewController = UINavigationController(rootViewController: <#T##UIViewController#>)
+        window?.rootViewController = UINavigationController(rootViewController: VideosViewController())
+        window?.backgroundColor = .systemBackground
+        window?.makeKeyAndVisible()
     }
 }
 
