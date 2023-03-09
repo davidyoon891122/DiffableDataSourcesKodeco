@@ -43,6 +43,10 @@ class VideosViewController: UIViewController {
     
     private var videoList = Video.allVideos
     
+    typealias DataSource = UICollectionViewDiffableDataSource<Section, Video>
+    
+    private lazy var dataSource = makeDataSource()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         configureSearchController()
@@ -95,7 +99,7 @@ extension VideosViewController: UICollectionViewDelegate {
         _ collectionView: UICollectionView,
         didSelectItemAt indexPath: IndexPath
     ) {
-        let video = videoList[indexPath.row]
+        guard let video = dataSource.itemIdentifier(for: indexPath) else { return }
         guard let link = video.link else {
             print("Invalid Link")
             return
@@ -168,6 +172,16 @@ private extension VideosViewController {
         return videos.filter {
             $0.title.lowercased().contains(query.lowercased())
         }
+    }
+    
+    func makeDataSource() -> DataSource {
+        let dataSource = DataSource(collectionView: collectionView, cellProvider: { (collectionView, indexPath, video) -> UICollectionViewCell? in
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: VideoCollectionViewCell.identifier, for: indexPath) as? VideoCollectionViewCell
+            cell?.setupCell(video: video)
+            return cell
+        })
+        
+        return dataSource
     }
 }
 
