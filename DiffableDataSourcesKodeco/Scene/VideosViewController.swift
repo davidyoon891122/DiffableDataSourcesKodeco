@@ -9,6 +9,10 @@ import UIKit
 import SnapKit
 import SafariServices
 
+enum Section {
+    case main
+}
+
 class VideosViewController: UIViewController {
     private lazy var searchController: UISearchController = {
         let searchController = UISearchController()

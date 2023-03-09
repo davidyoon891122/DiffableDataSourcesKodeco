@@ -7,7 +7,15 @@
 
 import UIKit
 
-class Video {
+class Video: Hashable {
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+    
+    static func == (lhs: Video, rhs: Video) -> Bool {
+        return lhs.id == rhs.id
+    }
+    
     var id = UUID()
     var title: String
     var thumbnail: UIImage?
